@@ -97,116 +97,165 @@ class _BranchDetailsState extends ConsumerState<BranchDetails> {
                         (BuildContext context, WidgetRef ref, Widget? child) {
                       return Expanded(
                         flex: 3,
-                        child: DefaultTextFormFieldWithTitle(
-                          fieldTitle: 'Custom No.',
-                          controller: ref
-                              .read(branchDetailsProvider)
-                              .customNoController,
-                          type: TextInputType.number,
+                        child: FocusScope(
+                          child: DefaultTextFormFieldWithTitle(
+                            focusNode:
+                                ref.read(branchDetailsProvider).customNoFocus,
+                            fieldTitle: 'Custom No.',
+                            controller: ref
+                                .read(branchDetailsProvider)
+                                .customNoController,
+                            type: TextInputType.number,
+                          ),
                         ),
                       );
                     },
                   ),
                 ],
               ),
-              Consumer(
-                builder: (BuildContext context, WidgetRef ref, Widget? child) {
-                  var prov = ref.read(branchDetailsProvider);
-                  return Column(
-                    children: [
-                      DefaultTextFormFieldWithTitle(
-                        fieldTitle: 'Arabic Name',
-                        controller: prov.arabicNameController,
-                      ),
-                      SizedBox(height: 10.h),
-                      DefaultTextFormFieldWithTitle(
-                        fieldTitle: 'Arabic Description',
-                        controller: prov.arabicDescriptionController,
-                      ),
-                      SizedBox(height: 10.h),
-                      DefaultTextFormFieldWithTitle(
-                        fieldTitle: 'English Name',
-                        controller: prov.englishNameController,
-                      ),
-                      SizedBox(height: 10.h),
-                      DefaultTextFormFieldWithTitle(
-                        fieldTitle: 'English Description',
-                        controller: prov.englishDescriptionController,
-                      ),
-                      SizedBox(height: 10.h),
-                      DefaultTextFormFieldWithTitle(
-                        fieldTitle: 'Note',
-                        controller: prov.notesController,
-                      ),
-                      SizedBox(height: 10.h),
-                      DefaultTextFormFieldWithTitle(
-                        fieldTitle: 'Address',
-                        controller: prov.addressController,
-                      ),
-                      SizedBox(height: 10.h),
-                    ],
-                  );
-                },
+              FocusScope(
+                child: Consumer(
+                  builder:
+                      (BuildContext context, WidgetRef ref, Widget? child) {
+                    var prov = ref.read(branchDetailsProvider);
+                    // ignore: unused_field
+
+                    return Column(
+                      children: [
+                        DefaultTextFormFieldWithTitle(
+                          fieldTitle: 'Arabic Name',
+                          focusNode: prov.arabicNameFocus,
+                          controller: prov.arabicNameController,
+                        ),
+                        SizedBox(height: 10.h),
+                        DefaultTextFormFieldWithTitle(
+                          fieldTitle: 'Arabic Description',
+                          focusNode: prov.arabicDescFocus,
+                          controller: prov.arabicDescriptionController,
+                        ),
+                        SizedBox(height: 10.h),
+                        DefaultTextFormFieldWithTitle(
+                          fieldTitle: 'English Name',
+                          focusNode: prov.englishNameFocus,
+                          controller: prov.englishNameController,
+                        ),
+                        SizedBox(height: 10.h),
+                        DefaultTextFormFieldWithTitle(
+                          fieldTitle: 'English Description',
+                          focusNode: prov.englishDescFocus,
+                          controller: prov.englishDescriptionController,
+                        ),
+                        SizedBox(height: 10.h),
+                        DefaultTextFormFieldWithTitle(
+                          fieldTitle: 'Note',
+                          focusNode: prov.notesFocus,
+                          controller: prov.notesController,
+                        ),
+                        SizedBox(height: 10.h),
+                        DefaultTextFormFieldWithTitle(
+                          fieldTitle: 'Address',
+                          focusNode: prov.addressFocus,
+                          controller: prov.addressController,
+                        ),
+                        SizedBox(height: 10.h),
+                      ],
+                    );
+                  },
+                ),
               ),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Container(
-              decoration:
-                  BoxDecoration(color: kPrimaryColor, shape: BoxShape.circle),
-              child: IconButton(
-                icon: const Icon(
-                  Icons.keyboard_double_arrow_left_outlined,
-                  color: kWhite,
+      bottomNavigationBar: Consumer(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) {
+          var prov = ref.watch(branchDetailsProvider);
+          var list = prov.branchesList;
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: widget.index == 0
+                        ? kPrimaryColor.withOpacity(0.7)
+                        : kPrimaryColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.keyboard_double_arrow_left_outlined,
+                      color: kWhite,
+                    ),
+                    onPressed: widget.index == 0
+                        ? null
+                        : () {
+                            navigateToPrevious();
+                          },
+                  ),
                 ),
-                onPressed: () {
-                  navigateToPrevious();
-                },
-              ),
-            ),
-            Container(
-              decoration:
-                  BoxDecoration(color: kPrimaryColor, shape: BoxShape.circle),
-              child: IconButton(
-                icon: const Icon(Icons.keyboard_arrow_left_outlined),
-                color: kWhite,
-                onPressed: () {},
-              ),
-            ),
-            Text(
-              '${widget.branch.id}/${widget.branches.length}',
-              style: const TextStyle(fontSize: 18),
-            ),
-            Container(
-              decoration:
-                  BoxDecoration(color: kPrimaryColor, shape: BoxShape.circle),
-              child: IconButton(
-                icon: const Icon(Icons.keyboard_arrow_right_outlined),
-                color: kWhite,
-                onPressed: () {},
-              ),
-            ),
-            Container(
-              decoration:
-                  BoxDecoration(color: kPrimaryColor, shape: BoxShape.circle),
-              child: IconButton(
-                icon: const Icon(
-                  Icons.keyboard_double_arrow_right_outlined,
-                  color: kWhite,
+                Container(
+                  decoration: BoxDecoration(
+                    color: prov.isFirstNode
+                        ? kPrimaryColor.withOpacity(0.7)
+                        : kPrimaryColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Icons.keyboard_arrow_left_outlined),
+                    color: kWhite,
+                    onPressed: () {
+                      prov.previousFocus(context);
+                    },
+                  ),
                 ),
-                onPressed: () {
-                  navigateToNext();
-                },
-              ),
+                Text(
+                  '${widget.branch.id}/${widget.branches.length}',
+                  style: const TextStyle(fontSize: 18),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: prov.isLastNode
+                        ? kPrimaryColor.withOpacity(0.7)
+                        :
+                        //  widget.index == list.length - 1
+                        //     ?
+                        //     :
+                        kPrimaryColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Icons.keyboard_arrow_right_outlined),
+                    color: kWhite,
+                    onPressed: () {
+                      prov.nextFocus(context);
+                    },
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: widget.index == list.length - 1
+                        ? kPrimaryColor.withOpacity(0.7)
+                        : kPrimaryColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.keyboard_double_arrow_right_outlined,
+                      color: kWhite,
+                    ),
+                    onPressed: widget.index == list.length - 1
+                        ? null
+                        : () {
+                            navigateToNext();
+                          },
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

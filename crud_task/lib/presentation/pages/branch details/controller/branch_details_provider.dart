@@ -17,6 +17,65 @@ class BranchDetailsProvider extends ChangeNotifier {
   TextEditingController notesController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   List<BranchModel> branchesList = [];
+  FocusScopeNode customNoFocus = FocusScopeNode();
+  FocusScopeNode arabicNameFocus = FocusScopeNode();
+  FocusScopeNode arabicDescFocus = FocusScopeNode();
+  FocusScopeNode englishNameFocus = FocusScopeNode();
+  FocusScopeNode englishDescFocus = FocusScopeNode();
+  FocusScopeNode notesFocus = FocusScopeNode();
+  FocusScopeNode addressFocus = FocusScopeNode();
+
+// create function to go to the nextfocus node
+
+  void nextFocus(BuildContext context) {
+    List<FocusScopeNode> nodes = [
+      customNoFocus,
+      arabicNameFocus,
+      arabicDescFocus,
+      englishNameFocus,
+      englishDescFocus,
+      notesFocus,
+      addressFocus
+    ];
+
+    int index = nodes.indexWhere((element) => element.hasFocus);
+    if (index < nodes.length - 1) {
+      isFirstNode = false;
+      notifyListeners();
+      FocusScope.of(context).requestFocus(nodes[index + 1]);
+      if (index == 5) {
+        isLastNode = true;
+        notifyListeners();
+      }
+    }
+  }
+
+
+  bool isFirstNode = true;
+  bool isLastNode = false;
+  void previousFocus(BuildContext context) {
+    List<FocusScopeNode> nodes = [
+      customNoFocus,
+      arabicNameFocus,
+      arabicDescFocus,
+      englishNameFocus,
+      englishDescFocus,
+      notesFocus,
+      addressFocus
+    ];
+
+    int index = nodes.indexWhere((element) => element.hasFocus);
+    if (index > 0) {
+      isLastNode = false;
+      notifyListeners();
+      print('index $index');
+      FocusScope.of(context).requestFocus(nodes[index - 1]);
+      if (index == 1) {
+        isFirstNode = true;
+        notifyListeners();
+      }
+    }
+  }
 
   final SqlDb _db = SqlDb();
   addNewBranch(context) async {
@@ -71,7 +130,7 @@ class BranchDetailsProvider extends ChangeNotifier {
         englishName: map['english_name'] as String?,
         arabicDescription: map['arabic_description'] as String?,
         englishDescription: map['english_description'] as String?,
-        note: map['note'] as String?, // Changed 'notes' to match your model
+        note: map['note'] as String?,
         address: map['address'] as String?,
       );
     }).toList();

@@ -80,6 +80,8 @@ class DefaultTextFormFieldWithTitle extends StatelessWidget {
           SizedBox(
             height: 30.h,
             child: TextFormField(
+              focusNode: focusNode,
+              
               textAlignVertical: TextAlignVertical.bottom,
               initialValue: initialValue,
               controller: controller,
@@ -90,8 +92,9 @@ class DefaultTextFormFieldWithTitle extends StatelessWidget {
               },
               inputFormatters: inputFormatters,
               keyboardType: type,
+
               readOnly: readOnly,
-              focusNode: focusNode,
+              
               enabled: isClickable,
               maxLength: maxLength,
               onChanged: onChange,
@@ -106,11 +109,13 @@ class DefaultTextFormFieldWithTitle extends StatelessWidget {
                   color: textColor ?? kDarkBlue,
                   fontSize: fontSize ?? 15,
                   height: height),
+              
               decoration: InputDecoration(
                 alignLabelWithHint: true,
                 counterText: '',
                 prefixIcon: prefixIcon,
                 hintText: hintText,
+              
                 hintStyle: const TextStyle(
                   color: kGrey,
                   fontSize: 15,
