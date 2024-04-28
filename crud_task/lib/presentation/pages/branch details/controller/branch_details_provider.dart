@@ -17,63 +17,119 @@ class BranchDetailsProvider extends ChangeNotifier {
   TextEditingController notesController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   List<BranchModel> branchesList = [];
-  FocusScopeNode customNoFocus = FocusScopeNode();
-  FocusScopeNode arabicNameFocus = FocusScopeNode();
-  FocusScopeNode arabicDescFocus = FocusScopeNode();
-  FocusScopeNode englishNameFocus = FocusScopeNode();
-  FocusScopeNode englishDescFocus = FocusScopeNode();
-  FocusScopeNode notesFocus = FocusScopeNode();
-  FocusScopeNode addressFocus = FocusScopeNode();
+  FocusNode customNoFocus = FocusNode();
+  FocusNode arabicNameFocus = FocusNode();
+  FocusNode arabicDescFocus = FocusNode();
+  FocusNode englishNameFocus = FocusNode();
+  FocusNode englishDescFocus = FocusNode();
+  FocusNode notesFocus = FocusNode();
+  FocusNode addressFocus = FocusNode();
 
-// create function to go to the nextfocus node
+  int currentIndex = 0;
+
+  /// Navigates to the next focus node.
+  ///
+  /// [context] is the build context of the screen.
+  ///
+  /// Returns a [void].
+
+  void disposeNodes() {
+    customNoFocus.dispose();
+    arabicNameFocus.dispose();
+    arabicDescFocus.dispose();
+    englishNameFocus.dispose();
+    englishDescFocus.dispose();
+    notesFocus.dispose();
+    addressFocus.dispose();
+  }
+
+  // create previousFocus method same as nextFocus
 
   void nextFocus(BuildContext context) {
-    List<FocusScopeNode> nodes = [
+    final nodes = <FocusNode>[
       customNoFocus,
       arabicNameFocus,
       arabicDescFocus,
       englishNameFocus,
       englishDescFocus,
       notesFocus,
-      addressFocus
+      addressFocus,
     ];
-
-    int index = nodes.indexWhere((element) => element.hasFocus);
-    if (index < nodes.length - 1) {
-      isFirstNode = false;
+    for (final node in nodes) {
+      node.addListener(() {
+        if (node.hasFocus) {
+          currentIndex = nodes.indexOf(node);
+          isFirstNode = node == nodes.first;
+          isLastNode = node == nodes.last;
+          notifyListeners();
+        }
+      });
+    }
+    print('index => $currentIndex');
+    if (currentIndex >= 0 && currentIndex < nodes.length - 1) {
+      FocusScope.of(context).requestFocus(nodes[currentIndex + 1]);
+      print('Requesting focus on node ${currentIndex + 1}');
+      currentIndex++;
       notifyListeners();
-      FocusScope.of(context).requestFocus(nodes[index + 1]);
-      if (index == 5) {
-        isLastNode = true;
-        notifyListeners();
-      }
     }
   }
 
+  // void nextFocus(BuildContext context) {
+  //   final nodes = <FocusNode>[
+  //     customNoFocus,
+  //     arabicNameFocus,
+  //     arabicDescFocus,
+  //     englishNameFocus,
+  //     englishDescFocus,
+  //     notesFocus,
+  //     addressFocus,
+  //   ];
+
+  //   int index = 0;
+  //   // nodes.indexWhere((element) => element.hasFocus);
+  //   if (index < nodes.length - 1) {
+  //     if (nodes[index].hasFocus) {
+  //       FocusScope.of(context).requestFocus(nodes[index + 1]);
+
+  //       print(index);
+  //     }
+  //     isFirstNode = false;
+  //     notifyListeners();
+  //     if (index == 5) {
+  //       isLastNode = true;
+  //       notifyListeners();
+  //     }
+  //   }
+  // }
 
   bool isFirstNode = true;
   bool isLastNode = false;
   void previousFocus(BuildContext context) {
-    List<FocusScopeNode> nodes = [
+    final nodes = <FocusNode>[
       customNoFocus,
       arabicNameFocus,
       arabicDescFocus,
       englishNameFocus,
       englishDescFocus,
       notesFocus,
-      addressFocus
+      addressFocus,
     ];
-
-    int index = nodes.indexWhere((element) => element.hasFocus);
-    if (index > 0) {
-      isLastNode = false;
+    for (final node in nodes) {
+      node.addListener(() {
+        if (node.hasFocus) {
+          currentIndex = nodes.indexOf(node);
+          isFirstNode = node == nodes.first;
+          isLastNode = node == nodes.last;
+          notifyListeners();
+        }
+      });
+    }
+    print('index => $currentIndex');
+    if (currentIndex > 0) {
+      FocusScope.of(context).requestFocus(nodes[currentIndex - 1]);
+      print('Requesting focus on node ${currentIndex - 1}');
+      currentIndex--;
       notifyListeners();
-      print('index $index');
-      FocusScope.of(context).requestFocus(nodes[index - 1]);
-      if (index == 1) {
-        isFirstNode = true;
-        notifyListeners();
-      }
     }
   }
 
@@ -94,6 +150,7 @@ class BranchDetailsProvider extends ChangeNotifier {
     ''');
     branchIdController.text = newBranchId.toString();
     await readData();
+    _initialControllers();
     _goToBranchDetails(context, newBranchId);
   }
 
@@ -106,6 +163,17 @@ class BranchDetailsProvider extends ChangeNotifier {
                   branches: branchesList,
                   index: id,
                 )));
+  }
+  // create initialController method
+
+  void _initialControllers() {
+    customNoController.text = '';
+    arabicNameController.text = '';
+    arabicDescriptionController.text = '';
+    englishNameController.text = '';
+    englishDescriptionController.text = '';
+    notesController.text = '';
+    addressController.text = '';
   }
 
   updateControllers(BranchModel branch) {

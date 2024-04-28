@@ -23,16 +23,22 @@ class BranchDetails extends ConsumerStatefulWidget {
 }
 
 class _BranchDetailsState extends ConsumerState<BranchDetails> {
-  @override
-  void initState() {
-    super.initState();
-  }
+// _disposeNodes() {
+//   ref.read(branchDetailsProvider).disposeNodes();
+// }
+// @override
+//   void dispose() {
+//     _disposeNodes();
+//     super.dispose();
+//   }
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leadingWidth: 70.w,
+        leadingWidth: 80.w,
         leading: Row(
           children: [
             SizedBox(width: 5.w),
@@ -97,71 +103,67 @@ class _BranchDetailsState extends ConsumerState<BranchDetails> {
                         (BuildContext context, WidgetRef ref, Widget? child) {
                       return Expanded(
                         flex: 3,
-                        child: FocusScope(
-                          child: DefaultTextFormFieldWithTitle(
-                            focusNode:
-                                ref.read(branchDetailsProvider).customNoFocus,
-                            fieldTitle: 'Custom No.',
-                            controller: ref
-                                .read(branchDetailsProvider)
-                                .customNoController,
-                            type: TextInputType.number,
-                          ),
+                        child: DefaultTextFormFieldWithTitle(
+                          focusNode:
+                              ref.read(branchDetailsProvider).customNoFocus,
+                          autoFocus: true,
+                          fieldTitle: 'Custom No.',
+                          controller: ref
+                              .read(branchDetailsProvider)
+                              .customNoController,
+                          type: TextInputType.number,
                         ),
                       );
                     },
                   ),
                 ],
               ),
-              FocusScope(
-                child: Consumer(
-                  builder:
-                      (BuildContext context, WidgetRef ref, Widget? child) {
-                    var prov = ref.read(branchDetailsProvider);
-                    // ignore: unused_field
+              Consumer(
+                builder: (BuildContext context, WidgetRef ref, Widget? child) {
+                  var prov = ref.read(branchDetailsProvider);
+                  // ignore: unused_field
 
-                    return Column(
-                      children: [
-                        DefaultTextFormFieldWithTitle(
-                          fieldTitle: 'Arabic Name',
-                          focusNode: prov.arabicNameFocus,
-                          controller: prov.arabicNameController,
-                        ),
-                        SizedBox(height: 10.h),
-                        DefaultTextFormFieldWithTitle(
-                          fieldTitle: 'Arabic Description',
-                          focusNode: prov.arabicDescFocus,
-                          controller: prov.arabicDescriptionController,
-                        ),
-                        SizedBox(height: 10.h),
-                        DefaultTextFormFieldWithTitle(
-                          fieldTitle: 'English Name',
-                          focusNode: prov.englishNameFocus,
-                          controller: prov.englishNameController,
-                        ),
-                        SizedBox(height: 10.h),
-                        DefaultTextFormFieldWithTitle(
-                          fieldTitle: 'English Description',
-                          focusNode: prov.englishDescFocus,
-                          controller: prov.englishDescriptionController,
-                        ),
-                        SizedBox(height: 10.h),
-                        DefaultTextFormFieldWithTitle(
-                          fieldTitle: 'Note',
-                          focusNode: prov.notesFocus,
-                          controller: prov.notesController,
-                        ),
-                        SizedBox(height: 10.h),
-                        DefaultTextFormFieldWithTitle(
-                          fieldTitle: 'Address',
-                          focusNode: prov.addressFocus,
-                          controller: prov.addressController,
-                        ),
-                        SizedBox(height: 10.h),
-                      ],
-                    );
-                  },
-                ),
+                  return Column(
+                    children: [
+                      DefaultTextFormFieldWithTitle(
+                        fieldTitle: 'Arabic Name',
+                        focusNode: prov.arabicNameFocus,
+                        controller: prov.arabicNameController,
+                      ),
+                      SizedBox(height: 10.h),
+                      DefaultTextFormFieldWithTitle(
+                        fieldTitle: 'Arabic Description',
+                        focusNode: prov.arabicDescFocus,
+                        controller: prov.arabicDescriptionController,
+                      ),
+                      SizedBox(height: 10.h),
+                      DefaultTextFormFieldWithTitle(
+                        fieldTitle: 'English Name',
+                        focusNode: prov.englishNameFocus,
+                        controller: prov.englishNameController,
+                      ),
+                      SizedBox(height: 10.h),
+                      DefaultTextFormFieldWithTitle(
+                        fieldTitle: 'English Description',
+                        focusNode: prov.englishDescFocus,
+                        controller: prov.englishDescriptionController,
+                      ),
+                      SizedBox(height: 10.h),
+                      DefaultTextFormFieldWithTitle(
+                        fieldTitle: 'Note',
+                        focusNode: prov.notesFocus,
+                        controller: prov.notesController,
+                      ),
+                      SizedBox(height: 10.h),
+                      DefaultTextFormFieldWithTitle(
+                        fieldTitle: 'Address',
+                        focusNode: prov.addressFocus,
+                        controller: prov.addressController,
+                      ),
+                      SizedBox(height: 10.h),
+                    ],
+                  );
+                },
               ),
             ],
           ),

@@ -28,6 +28,7 @@ class DefaultTextFormFieldWithTitle extends StatelessWidget {
   final TextAlign? textAlign;
   final int lines;
   final int? maxLength;
+  final bool autoFocus;
   final double? fontSize;
   final Color? textColor;
   final Color? hintTextColor;
@@ -40,6 +41,7 @@ class DefaultTextFormFieldWithTitle extends StatelessWidget {
     this.validate,
     this.onSaved,
     this.inputFormatters,
+    this.autoFocus = false,
     this.readOnly = false,
     this.maxLength,
     this.enabledBorderColor,
@@ -80,8 +82,8 @@ class DefaultTextFormFieldWithTitle extends StatelessWidget {
           SizedBox(
             height: 30.h,
             child: TextFormField(
+              autofocus: autoFocus,
               focusNode: focusNode,
-              
               textAlignVertical: TextAlignVertical.bottom,
               initialValue: initialValue,
               controller: controller,
