@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:crud_task/presentation/pages/home%20screen/home_screen.dart';
 import 'package:crud_task/utils/colors/app_color.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +9,10 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  if(Platform.isWindows){
   sqfliteFfiInit();
-      databaseFactory = databaseFactoryFfi;
+  databaseFactory = databaseFactoryFfi;
+  }
   runApp(const MyApp());
 }
 
